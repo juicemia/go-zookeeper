@@ -107,6 +107,13 @@ type Conn struct {
 // connOption represents a connection option.
 type connOption func(c *Conn)
 
+func (opt *connOption) Chain(fn connOption) connOption {
+	return func(c *Conn) {
+		opt(c)
+		fn(c)
+	}
+}
+
 type request struct {
 	xid        int32
 	opcode     int32
